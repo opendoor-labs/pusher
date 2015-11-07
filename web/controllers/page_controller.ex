@@ -1,0 +1,7 @@
+defmodule Pusher.PageController do
+  use Pusher.Web, :controller
+
+  def index(conn, _params) do
+    render conn, "index.html"
+  end
+end

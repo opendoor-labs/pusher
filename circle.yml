@@ -1,0 +1,12 @@
+dependencies:
+  pre:
+    - bin/ci/install
+  cache_directories:
+    - ~/dependencies
+    - ~/.mix
+    - _build
+    - deps
+
+test:
+  override:
+    - bin/ci/test

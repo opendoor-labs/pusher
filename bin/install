@@ -1,0 +1,8 @@
+#!/bin/bash
+
+brew update
+brew install elixir redis node
+mix local.hex --force
+mix archive.install --force https://github.com/phoenixframework/phoenix/releases/download/v0.13.1/phoenix_new-0.13.1.ez
+mix deps.get
+npm install
