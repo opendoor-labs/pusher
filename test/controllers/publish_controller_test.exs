@@ -1,3 +1,4 @@
+
 defmodule Pusher.PublishControllerTest do
   use Pusher.ConnCase
   use Pusher.ChannelCase
@@ -34,7 +35,7 @@ defmodule Pusher.PublishControllerTest do
       ]
     }
     assert resp.status == 200
-    assert_push "msg", %{"version" => "sha123"}
-    assert_push "update", %{"id" => "123"}
+    assert_broadcast "msg", %{"version" => "sha123"}
+    assert_broadcast "update", %{"id" => "123"}
   end
 end
