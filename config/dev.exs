@@ -7,7 +7,7 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :pusher, Pusher.Endpoint,
-  http: [port: 4000],
+  http: [ip: {127,0,0,1}, port: System.get_env("PORT") || 4000],
   pubsub: [adapter: Phoenix.PubSub.Redis],
   debug_errors: true,
   code_reloader: true,
