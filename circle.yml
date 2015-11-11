@@ -10,9 +10,3 @@ dependencies:
 test:
   override:
     - bin/ci/test
-
-deployment:
-  staging:
-    branch: master
-    heroku:
-      appname: staging-opendoor-pusher
