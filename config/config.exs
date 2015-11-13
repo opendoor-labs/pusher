@@ -28,4 +28,6 @@ config :guardian, Guardian,
   serializer: Pusher.GuardianSerializer,
   atoms: [:listen, :publish, :email, :name, :id]
 
+config :honeybadger, excluded_envs: [:dev, :test]
+
 import_config "#{Mix.env}.exs"
