@@ -4,7 +4,7 @@ config :pusher, Pusher.Endpoint,
   http: [port: {:system, "PORT"}],
   pubsub: [adapter: Phoenix.PubSub.Redis, url: System.get_env("REDIS_URL")],
   url: [host: "staging-opendoor-pusher.herokuapp.com"],
-  check_origin: ["//demo.simplersell.com"],
+  check_origin: ["//demo.simplersell.com", "//demo.opendoor.com"],
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 config :logger, level: :info
