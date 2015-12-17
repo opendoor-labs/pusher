@@ -9,7 +9,6 @@ config :pusher, Pusher.Endpoint,
 
 config :logger, level: :info
 config :pusher, :authentication, secret: System.get_env("SHARED_SECRET")
-config :joken, secret_key: System.get_env("JOKEN_SECRET")
 config :guardian, Guardian, secret_key: System.get_env("GUARDIAN_SECRET")
 
 config :pusher, Pusher.Endpoint,

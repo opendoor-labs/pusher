@@ -19,14 +19,13 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :joken, config_module: Guardian.JWT
-
 config :guardian, Guardian,
   issuer: "Pusher",
+  allowed_algos: ["HS256", "HS512"],
   ttl: { 30, :days },
   verify_issuer: false,
-  serializer: Pusher.GuardianSerializer,
-  atoms: [:listen, :publish, :email, :name, :id]
+  verify_module: Guardian.JWT,
+  serializer: Pusher.GuardianSerializer
 
 config :honeybadger, excluded_envs: [:dev, :test]
 

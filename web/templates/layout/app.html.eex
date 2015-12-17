@@ -12,7 +12,7 @@
   <body>
     <div class="container" role="main">
       Hello World!
-      <%= @inner %>
+      <%= render @view_module, @view_template, assigns %>
     </div> <!-- /container -->
   </body>
 </html>
