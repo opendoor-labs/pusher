@@ -27,6 +27,6 @@ config :guardian, Guardian,
   verify_module: Guardian.JWT,
   serializer: Pusher.GuardianSerializer
 
-config :honeybadger, excluded_envs: [:dev, :test]
+config :honeybadger, excluded_envs: [:dev, :brew, :test]
 
 import_config "#{Mix.env}.exs"
