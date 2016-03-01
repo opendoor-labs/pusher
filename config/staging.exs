@@ -13,5 +13,4 @@ config :pusher, :authentication, secret: System.get_env("SHARED_SECRET")
 config :pusher, Pusher.Endpoint,
   secret_key_base: System.get_env("PUSHER_SECRET")
 
-IO.puts("\n\n\nGUARDIAN SECRET KEY #{inspect(System.get_env("GUARDIAN_SECRET"))}")
 config :guardian, Guardian, secret_key: System.get_env("GUARDIAN_SECRET")
