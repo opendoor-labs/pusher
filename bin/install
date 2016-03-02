@@ -3,6 +3,6 @@
 brew update
 brew install elixir redis
 mix local.hex --force
-mix archive.install --force  https://github.com/phoenixframework/phoenix/releases/download/v1.0.3/phoenix_new-1.0.3.ez
+mix archive.install --force  https://github.com/phoenixframework/archives/raw/master/phoenix_new-1.1.0.ez --force
 mix deps.get
 npm install
