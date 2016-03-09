@@ -1,3 +1,6 @@
+machine:
+  services:
+    - redis
 dependencies:
   pre:
     - bin/ci/install
