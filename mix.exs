@@ -17,7 +17,7 @@ defmodule Pusher.Mixfile do
   # Type `mix help compile.app` for more information
   def application do
     [mod: {Pusher, []},
-     applications: [:phoenix, :phoenix_html, :cowboy, :logger, :phoenix_pubsub_redis, :honeybadger, :guardian]]
+     applications: [:phoenix, :phoenix_html, :cowboy, :logger, :phoenix_pubsub, :phoenix_pubsub_redis, :honeybadger, :guardian]]
   end
 
   # Specifies which paths to compile per environment
