@@ -1,16 +1,22 @@
 defmodule Pusher.EventChannel do
   use Phoenix.Channel
-  use Guardian.Channel
+  import Guardian.Phoenix.Socket
 
   def join("public:" <> _topic_id, _auth_msg, socket) do
     {:ok, socket}
   end
 
-  def join(topic, %{ claims: claims, resource: _resource }, socket) do
-    if permitted_topic?(claims["listen"], topic) do
-      { :ok, %{ message: "Joined" }, socket }
-    else
-      { :error, :authentication_required }
+  def join(topic, %{ "guardian_token" => token }, socket) do
+    case sign_in(socket, token) do
+      {:ok, authed_socket, guardian_params} ->
+        claims = guardian_params[:claims]
+        if permitted_topic?(claims["listen"], topic) do
+          { :ok, %{ message: "Joined" }, authed_socket }
+        else
+          { :error, :authentication_required }
+        end
+      {:error, reason} ->
+          { :error, reason }
     end
   end
 
@@ -24,7 +30,7 @@ defmodule Pusher.EventChannel do
   end
 
   def handle_in(event, payload, socket) do
-    claims = Guardian.Channel.claims(socket)
+    claims = current_claims(socket)
     if(permitted_topic?(claims["publish"], socket.topic)) do
       broadcast! socket, event, payload
       { :noreply, socket }

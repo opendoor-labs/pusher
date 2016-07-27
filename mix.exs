@@ -29,14 +29,14 @@ defmodule Pusher.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [
-      {:phoenix, "~> 1.1.0"},
-      {:phoenix_html, "~> 2.3"},
+      {:phoenix, "~> 1.2"},
+      {:phoenix_html, "~> 2.6"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:phoenix_pubsub_redis, "~> 2.0" },
+      {:phoenix_pubsub_redis, "~> 2.1" },
       {:cowboy, "~> 1.0"},
-      {:guardian, "~> 0.8.0"},
-      {:exrm, "~> 0.19.9"},
-      {:honeybadger, "~> 0.3"},
+      {:guardian, "~> 0.12.0"},
+      {:exrm, "~> 1.0"},
+      {:honeybadger, "~> 0.6"},
     ]
   end
 end

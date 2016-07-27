@@ -22,3 +22,5 @@ config :logger, :console, format: "[$level] $message\n"
 
 config :pusher, :authentication, secret: "development"
 config :guardian, Guardian, secret_key: "development"
+
+config :honeybadger, :environment_name, :dev
