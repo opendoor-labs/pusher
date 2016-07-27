@@ -12,3 +12,5 @@ config :logger, level: :warn
 
 config :pusher, :authentication, secret: "test_secret"
 config :guardian, Guardian, secret_key: "test"
+
+config :honeybadger, :environment_name, :dev

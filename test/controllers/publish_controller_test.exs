@@ -4,12 +4,12 @@ defmodule Pusher.PublishControllerTest do
   use Pusher.ChannelCase
 
   setup do
-    @endpoint.subscribe(self(), "public:deploys")
+    @endpoint.subscribe("public:deploys")
     :ok
   end
 
   test "publishes messages with a valid secret" do
-    conn = conn()
+    conn = build_conn()
       |> put_req_header("accept", "application/json")
       |> put_req_header("authorization", Application.get_env(:pusher, :authentication)[:secret])
     resp = post conn, "/api/publish", %{topic: "public:deploys", event: "msg",  payload: %{version: "sha123"}}
@@ -18,7 +18,7 @@ defmodule Pusher.PublishControllerTest do
   end
 
   test "does not publish messages with a invalid secret" do
-    conn = conn()
+    conn = build_conn()
       |> put_req_header("accept", "application/json")
       |> put_req_header("authorization", "BAD")
     resp = post conn, "/api/publish", %{topic: "public:deploys", event: "msg",  payload: %{version: "sha123"}}
@@ -26,7 +26,7 @@ defmodule Pusher.PublishControllerTest do
   end
 
   test "publishes bulk messages" do
-    conn = conn()
+    conn = build_conn()
       |> put_req_header("accept", "application/json")
       |> put_req_header("authorization", Application.get_env(:pusher, :authentication)[:secret])
     resp = post conn, "/api/publish/bulk", %{ events: [
