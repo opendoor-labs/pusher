@@ -9,6 +9,7 @@ defmodule Pusher do
     children = [
       # Start the endpoint when the application starts
       supervisor(Pusher.Endpoint, []),
+      supervisor(Pusher.Presence, []),
       # Here you could define other workers and supervisors as children
       # worker(Pusher.Worker, [arg1, arg2, arg3]),
     ]
