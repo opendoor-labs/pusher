@@ -6,6 +6,7 @@ defmodule Pusher.EventChannelTest do
     {:ok, socket} = connect(EventSocket, %{})
     {:ok, _, socket} = subscribe_and_join(socket, "public:deploys")
     default_claims = %{
+      "sub" => %{},
       "exp" => Guardian.Utils.timestamp + 100_00,
       "aud" => "token",
       "jti" => "hi_there_fella",
@@ -45,19 +46,36 @@ defmodule Pusher.EventChannelTest do
   test "lets messages be published on private channels", %{socket: socket, default_claims: d_claims} do
     data = Dict.put(d_claims, "listen", ["private:*"])
            |> Dict.put("publish", ["private:*"])
-    {:ok, jwt, _} = Guardian.encode_and_sign("User:1", "token", data)
-    {:ok, _, socket} = subscribe_and_join(socket, "private:123:456", %{"guardian_token" => jwt})
+    channel = "private:123:456"
+    sub = %{"id" => 1, "name" => "Nolan Evans", "email" => "n@opendoor.com"}
+    {:ok, jwt, _} = Guardian.encode_and_sign(sub, "token", data)
+    {:ok, _, socket} = subscribe_and_join(socket, channel, %{"guardian_token" => jwt})
 
     push socket, "msg", %{"hello" => "world"}
     assert_push "msg", %{"hello" => "world"}
+    presences = Pusher.Presence.list(channel)
+    assert Map.has_key?(presences, "n@opendoor.com")
   end
 
   test "denies private channel publishing if missing key", %{socket: socket, default_claims: d_claims} do
     data = Dict.put(d_claims, "listen", ["private:*"])
           |> Dict.put("publish", [])
-    {:ok, jwt, _} = Guardian.encode_and_sign("User:1", "token", data)
+    sub = %{"id" => 1, "name" => "Nolan", "email" => "nolan@opendoor.com"}
+    {:ok, jwt, _} = Guardian.encode_and_sign(sub, "token", data)
     {:ok, _, socket} = subscribe_and_join(socket, "private:123:456", %{"guardian_token" => jwt})
     ref = push socket, "msg", %{"ping" => "pong"}
     assert_reply ref, :error
+  end
+
+  test "it allows private joins without a sub", %{socket: socket, default_claims: d_claims} do
+    data = Dict.put(d_claims, "listen", ["private:*"])
+          |> Dict.put("publish", ["private:*"])
+    channel = "private:123:456"
+    {:ok, jwt, _} = Guardian.encode_and_sign(%{}, "token", data)
+    {:ok, _, socket} = subscribe_and_join(socket, channel, %{"guardian_token" => jwt})
+
+    push socket, "msg", %{"hello" => "world"}
+    assert_push "msg", %{"hello" => "world"}
+    assert Pusher.Presence.list(channel) == %{}
   end
 end
