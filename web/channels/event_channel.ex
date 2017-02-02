@@ -28,12 +28,13 @@ defmodule Pusher.EventChannel do
 
   def handle_info(:after_join, socket) do
     push socket, "presence_state", Presence.list(socket)
-    claims = current_claims(socket)
-    is_map = Pusher.IsAHelper.is_a_map?(claims["sub"])
-    if(is_map && Map.has_key?(claims["sub"], "email")) do
-      {:ok, _} = Presence.track(socket, current_resource(socket)["email"], %{
-        online_at: :os.system_time(:milli_seconds)
-      })
+    case current_resource(socket) do
+      %{"email" => email} ->
+        {:ok, _} = Presence.track(socket, email, %{
+          online_at: :os.system_time(:milli_seconds)
+        })
+      _ ->
+        nil
     end
     {:noreply, socket}
   end
