@@ -29,7 +29,7 @@ defmodule Pusher.Mixfile do
   # Type `mix help deps` for examples and options
   defp deps do
     [
-      {:phoenix, "~> 1.2"},
+      {:phoenix, "~> 1.2.1"},
       {:phoenix_html, "~> 2.6"},
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:phoenix_pubsub_redis, "~> 2.1" },

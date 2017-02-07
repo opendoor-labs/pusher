@@ -44,6 +44,16 @@ defmodule Pusher.EventChannel do
     { :noreply, socket }
   end
 
+  def handle_in("presence_metadata", payload, socket) do
+    case current_resource(socket) do
+      %{"email" => email} ->
+        {:ok, _} = Presence.update(socket, email, fn meta -> Map.put(meta, :custom, payload) end)
+      _ ->
+        nil
+    end
+    { :noreply, socket }
+  end
+
   def handle_in(event, payload, socket) do
     claims = current_claims(socket)
     if(permitted_topic?(claims["publish"], socket.topic)) do

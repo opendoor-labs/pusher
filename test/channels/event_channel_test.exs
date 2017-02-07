@@ -78,4 +78,23 @@ defmodule Pusher.EventChannelTest do
     assert_push "msg", %{"hello" => "world"}
     assert Pusher.Presence.list(channel) == %{}
   end
+
+  test "it allows updating of custom metadata", %{socket: socket, default_claims: d_claims} do
+    data = Dict.put(d_claims, "listen", ["private:*"])
+           |> Dict.put("publish", ["private:*"])
+    channel = "private:123:456"
+    sub = %{"id" => 1, "name" => "Nolan Evans", "email" => "n@opendoor.com"}
+    {:ok, jwt, _} = Guardian.encode_and_sign(sub, "token", data)
+    {:ok, _, socket} = subscribe_and_join(socket, channel, %{"guardian_token" => jwt})
+
+    push socket, "msg", %{"hello" => "world"}
+    assert_push "msg", %{"hello" => "world"}
+
+    push socket, "presence_metadata", %{"customer_id" => 123}
+    assert_push "presence_diff", %{joins: %{"n@opendoor.com" => %{metas: [%{custom: %{"customer_id" => 123}}]}}}
+
+    presences = Pusher.Presence.list(channel)
+    %{"n@opendoor.com" => %{metas: [%{custom: %{"customer_id" => 123}}]}} = presences
+
+  end
 end
