@@ -53,8 +53,7 @@ defmodule Pusher.EventChannelTest do
 
     push socket, "msg", %{"hello" => "world"}
     assert_push "msg", %{"hello" => "world"}
-    presences = Pusher.Presence.list(channel)
-    assert Map.has_key?(presences, "n@opendoor.com")
+    assert Pusher.Presence.list(channel) == %{}
   end
 
   test "denies private channel publishing if missing key", %{socket: socket, default_claims: d_claims} do
@@ -79,10 +78,24 @@ defmodule Pusher.EventChannelTest do
     assert Pusher.Presence.list(channel) == %{}
   end
 
-  test "it allows updating of custom metadata", %{socket: socket, default_claims: d_claims} do
+  test "updates presence on presence channels", %{socket: socket, default_claims: d_claims} do
     data = Dict.put(d_claims, "listen", ["private:*"])
            |> Dict.put("publish", ["private:*"])
-    channel = "private:123:456"
+    channel = "private:presence:123:456"
+    sub = %{"id" => 1, "name" => "Nolan Evans", "email" => "n@opendoor.com"}
+    {:ok, jwt, _} = Guardian.encode_and_sign(sub, "token", data)
+    {:ok, _, socket} = subscribe_and_join(socket, channel, %{"guardian_token" => jwt})
+
+    push socket, "msg", %{"hello" => "world"}
+    assert_push "msg", %{"hello" => "world"}
+    presences = Pusher.Presence.list(channel)
+    assert Map.has_key?(presences, "n@opendoor.com")
+  end
+
+  test "it allows updating of custom presence metadata", %{socket: socket, default_claims: d_claims} do
+    data = Dict.put(d_claims, "listen", ["private:*"])
+           |> Dict.put("publish", ["private:*"])
+    channel = "private:presence:123:456"
     sub = %{"id" => 1, "name" => "Nolan Evans", "email" => "n@opendoor.com"}
     {:ok, jwt, _} = Guardian.encode_and_sign(sub, "token", data)
     {:ok, _, socket} = subscribe_and_join(socket, channel, %{"guardian_token" => jwt})
@@ -95,6 +108,5 @@ defmodule Pusher.EventChannelTest do
 
     presences = Pusher.Presence.list(channel)
     %{"n@opendoor.com" => %{metas: [%{custom: %{"customer_id" => 123}}]}} = presences
-
   end
 end
