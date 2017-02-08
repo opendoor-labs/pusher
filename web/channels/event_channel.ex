@@ -26,7 +26,7 @@ defmodule Pusher.EventChannel do
     { :error, :authentication_required }
   end
 
-  def handle_info(:after_join, socket) do
+  def handle_info(:after_join, socket = %{ topic: "private:presence:" <> _ }) do
     push socket, "presence_state", Presence.list(socket)
     case current_resource(socket) do
       %{"email" => email} ->
@@ -36,6 +36,10 @@ defmodule Pusher.EventChannel do
       _ ->
         nil
     end
+    {:noreply, socket}
+  end
+
+  def handle_info(:after_join, socket) do
     {:noreply, socket}
   end
 
