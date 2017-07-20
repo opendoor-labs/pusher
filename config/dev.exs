@@ -1,8 +1,9 @@
+node_name = "#{Mix.env()}#{System.os_time(:nanosecond)}"
 use Mix.Config
 
 config :pusher, Pusher.Endpoint,
   http: [ip: {127,0,0,1}, port: System.get_env("PORT") || 4000],
-  pubsub: [adapter: Phoenix.PubSub.Redis],
+  pubsub: [adapter: Phoenix.PubSub.Redis, node_name: node_name],
   debug_errors: true,
   code_reloader: true,
   cache_static_lookup: false
