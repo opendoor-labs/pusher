@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: opendoor/od-elixir:1.4.2
+
+      - image: redis:3.2.8
+
+    working_directory: /app
+
+    environment:
+      - MIX_ENV: test
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: pusher-deps-{{ checksum "mix.lock" }}
+
+      - run: mix deps.get
+
+      - run: mix deps.compile
+
+      - run: mix compile
+
+      - run: mix test
+
+      - save_cache:
+          key: pusher-deps-{{ checksum "mix.lock" }}
+          paths:
+            - /app/deps
