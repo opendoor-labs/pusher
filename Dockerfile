@@ -6,6 +6,7 @@ WORKDIR /app
 COPY . /app
 
 ENV MIX_ENV=docker
+ENV PORT=8585
 
 RUN mix local.hex --force
 RUN mix local.rebar --force

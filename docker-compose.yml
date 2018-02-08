@@ -3,7 +3,6 @@ version: '3'
 services:
   pusher:
     environment:
-      - PORT=8585
       - REDIS_URL=redis://redis:6379
     build:
       context: .
