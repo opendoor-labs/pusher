@@ -1,8 +1,6 @@
 # Pusher
-
-To start your new Phoenix application:
-
-1. Install everything required with: `bin/install`
-2. Start Phoenix endpoint with: `mix phoenix.server`
-
-Now you can visit `localhost:4000` from your browser.
+Running locally:
+* clone the repo
+* `docker-compose up`. This will give you a local pusher running at http://localhost:8585
+## Erlang version
+Pusher doesn't compile on newer versions of Erlang. It works if erlang is pinned to 1.5 like in the Dockerfile.
