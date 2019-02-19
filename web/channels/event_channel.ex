@@ -10,7 +10,7 @@ defmodule Pusher.EventChannel do
   def join(topic, %{ "guardian_token" => token }, socket) do
     case sign_in(socket, token) do
       {:ok, authed_socket, guardian_params} ->
-        send(self, :after_join)
+        send(self(), :after_join)
         claims = guardian_params[:claims]
         if permitted_topic?(claims["listen"], topic) do
           { :ok, %{ message: "Joined" }, authed_socket }
