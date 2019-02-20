@@ -1,4 +1,5 @@
-FROM elixir:1.5
+# keep in sync with elixir_buildpack.config
+FROM elixir:1.4.5
 
 RUN mkdir -p /app
 WORKDIR /app

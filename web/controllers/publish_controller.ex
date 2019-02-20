@@ -1,4 +1,6 @@
 defmodule Pusher.PublishController do
+  require Logger
+
   use Pusher.Web, :controller
 
   plug :authenticate
@@ -16,6 +18,7 @@ defmodule Pusher.PublishController do
   defp broadcast_event(event_params = %{ "topic" => topic, "event" => event }) do
     message = event_params["payload"] || %{}
     Pusher.Endpoint.broadcast! topic, event, message
+    Logger.info("Published event to #{topic}")
   end
 
   defp broadcast_event(_), do: :ok
